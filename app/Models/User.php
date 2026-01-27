@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HasStandardAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasStandardAttributes, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +19,16 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'full_name',
         'email',
+        'username',
         'password',
+        'is_active',
+        'is_verified',
+        'last_login_at',
+        'login_attempts',
+        'login_count',
+        'locked_until',
     ];
 
     /**
@@ -32,6 +39,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'activation_key',
+        'reset_key',
     ];
 
     /**
@@ -42,8 +51,19 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'is_active' => 'boolean',
+            'is_verified' => 'boolean',
+            'reset_key_expires_at' => 'datetime',
+            'reset_date' => 'datetime',
+            'last_login_at' => 'datetime',
+            'locked_until' => 'datetime',
         ];
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)
+            ->using(RoleUser::class)
+            ->withTimestamps();
     }
 }
