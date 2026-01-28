@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\BaseListResource;
 use App\Modules\User\Application\DTOs\GetUserListQuery;
 use App\Modules\User\Application\Commands\CreateUserCommand;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
@@ -42,15 +43,17 @@ class UserController extends Controller
 
     public function show(int $id)
     {
+        $userModel = \App\Models\User::findOrFail($id);
+        Gate::authorize('view', $userModel);
+
         $user = $this->getUser->execute($id);
-        if (!$user) {
-            throw new ModelNotFoundException('user not found');
-        }
         return new UserResource($user, 'user detail retrieved successfully');
     }
 
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', \App\Models\User::class);
+
         $query = GetUserListQuery::fromRequest($request->all());
         $users = $this->getUserList->execute($query);
 
@@ -59,6 +62,8 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
+        Gate::authorize('create', \App\Models\User::class);
+
         $command = CreateUserCommand::fromRequest($request->validated());
         $user = $this->createUser->execute($command);
         return new UserResource($user, 'user created successfully');
@@ -66,6 +71,9 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, int $id)
     {
+        $userModel = \App\Models\User::findOrFail($id);
+        Gate::authorize('update', $userModel);
+
         if (!$this->updateUser->execute($id, $request->validated())) {
             throw new ModelNotFoundException('user not found or update failed');
         }
@@ -76,6 +84,9 @@ class UserController extends Controller
 
     public function destroy(int $id)
     {
+        $userModel = \App\Models\User::findOrFail($id);
+        Gate::authorize('delete', $userModel);
+
         if (!$this->deleteUser->execute($id)) {
             throw new ModelNotFoundException('user not found or delete failed');
         }

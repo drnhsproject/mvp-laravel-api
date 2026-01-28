@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => env('SANCTUM_EXPIRATION', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,4 +81,14 @@ return [
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Token TTL Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Duration in minutes for access and refresh tokens.
+    |
+    */
+    'access_token_ttl' => env('AUTH_ACCESS_TOKEN_TTL', 60), // 1 hour
+    'refresh_token_ttl' => env('AUTH_REFRESH_TOKEN_TTL', 60 * 24 * 14), // 2 weeks
 ];

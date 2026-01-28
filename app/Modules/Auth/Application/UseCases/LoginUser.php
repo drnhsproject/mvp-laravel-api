@@ -40,17 +40,23 @@ class LoginUser
         })->unique('id')->values();
 
         // Clean up privileges relation from roles to avoid redundancy in the 'user' response object
-        // The frontend uses the flat 'permissions' list, so we don't need them nested in roles.
         $user->roles->each(function ($role) {
             $role->unsetRelation('privileges');
         });
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Token Configuration
+        $accessTtl = (int) config('sanctum.access_token_ttl', 60);
+        $refreshTtl = (int) config('sanctum.refresh_token_ttl', 60 * 24 * 14);
+
+        $accessToken = $user->createToken('access_token', ['access-api'], now()->addMinutes($accessTtl));
+        $refreshToken = $user->createToken('refresh_token', ['issue-access-token'], now()->addMinutes($refreshTtl));
 
         return [
-            'access_token' => $token,
+            'access_token' => $accessToken->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
             'token_type' => 'Bearer',
-            'user' => $user, // Roles are included but without nested privileges
+            'expires_in' => $accessTtl * 60, // seconds
+            'user' => $user,
             'role_privileges' => $rolePrivileges,
         ];
     }

@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $this->call(SysAdminSeeder::class);
+        $this->call([
+            PrivilegeSeeder::class,
+            SysAdminSeeder::class,
+            ViewerRoleSeeder::class,
+        ]);
     }
 }

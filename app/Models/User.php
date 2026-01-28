@@ -66,4 +66,49 @@ class User extends Authenticatable
             ->using(RoleUser::class)
             ->withTimestamps();
     }
+
+    /**
+     * Check if user has privilege.
+     */
+    /**
+     * Check if user has privilege.
+     */
+    public function hasPrivilege(string $module, string $action, string $namespace = '*'): bool
+    {
+        $this->loadMissing('roles.privileges');
+
+        return $this->roles
+            ->flatMap
+            ->privileges
+            ->contains(function ($privilege) use ($module, $action, $namespace) {
+
+                // Check Namespace (if explicit namespace requested)
+                // Wildcard in DB allows all
+                $privilegeNamespace = $privilege->namespace ?? '*';
+                $namespaceMatch = ($privilegeNamespace === '*')
+                    || ($namespace === '*')
+                    || ($privilegeNamespace === $namespace);
+
+                if (!$namespaceMatch) {
+                    return false;
+                }
+
+                // Wildcard Module
+                if ($privilege->module === '*' || $privilege->module === 'All Access') {
+                    return true;
+                }
+
+                // Exact Module
+                if ($privilege->module === $module) {
+                    // Wildcard Action
+                    if ($privilege->action === '*') {
+                        return true;
+                    }
+                    // Exact Action
+                    return $privilege->action === $action;
+                }
+
+                return false;
+            });
+    }
 }
