@@ -14,6 +14,7 @@ use App\Modules\User\Presentation\Resources\UserResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\BaseListResource;
+use App\Models\User;
 use App\Modules\User\Application\DTOs\GetUserListQuery;
 use App\Modules\User\Application\Commands\CreateUserCommand;
 use Illuminate\Support\Facades\Gate;
@@ -43,8 +44,8 @@ class UserController extends Controller
 
     public function show(int $id)
     {
-        $userModel = \App\Models\User::findOrFail($id);
-        Gate::authorize('view', $userModel);
+        $userModel = User::findOrFail($id);
+        Gate::authorize('detail', $userModel);
 
         $user = $this->getUser->execute($id);
         return new UserResource($user, 'user detail retrieved successfully');
@@ -52,7 +53,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        Gate::authorize('viewAny', \App\Models\User::class);
+        Gate::authorize('list', User::class);
 
         $query = GetUserListQuery::fromRequest($request->all());
         $users = $this->getUserList->execute($query);
@@ -62,7 +63,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        Gate::authorize('create', \App\Models\User::class);
+        Gate::authorize('create', User::class);
 
         $command = CreateUserCommand::fromRequest($request->validated());
         $user = $this->createUser->execute($command);
@@ -71,7 +72,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, int $id)
     {
-        $userModel = \App\Models\User::findOrFail($id);
+        $userModel = User::findOrFail($id);
         Gate::authorize('update', $userModel);
 
         if (!$this->updateUser->execute($id, $request->validated())) {
@@ -84,7 +85,7 @@ class UserController extends Controller
 
     public function destroy(int $id)
     {
-        $userModel = \App\Models\User::findOrFail($id);
+        $userModel = User::findOrFail($id);
         Gate::authorize('delete', $userModel);
 
         if (!$this->deleteUser->execute($id)) {

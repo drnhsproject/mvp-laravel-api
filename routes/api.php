@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Modules\Role\Presentation\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Modules\User\Presentation\Controllers\UserController;
 
@@ -22,7 +23,7 @@ Route::middleware('auth:sanctum')
             ])
             ->middleware('check.permission');
 
-        Route::apiResource('roles', \App\Modules\Role\Presentation\Controllers\RoleController::class)
+        Route::apiResource('roles', RoleController::class)
             ->names([
                 'index' => 'role.list',
                 'show' => 'role.detail',
