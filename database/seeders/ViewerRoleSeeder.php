@@ -18,7 +18,7 @@ class ViewerRoleSeeder extends Seeder
     {
         // 1. Create Viewer Role
         $role = Role::updateOrCreate(
-            ['name' => 'Viewer'],
+            ['name' => 'ROLE_VIEWER'],
             ['is_active' => true]
         );
 
@@ -40,7 +40,7 @@ class ViewerRoleSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'viewer@app.com'],
             [
-                'full_name' => 'Viewer User',
+                'full_name' => 'User Viewer',
                 'username' => 'viewer',
                 'password' => Hash::make('Viewer@123'),
                 'is_active' => true,

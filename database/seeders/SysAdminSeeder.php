@@ -17,7 +17,7 @@ class SysAdminSeeder extends Seeder
     {
         // 1. Create or Update Super Admin Role
         $role = Role::updateOrCreate(
-            ['name' => 'Super Admin'],
+            ['name' => 'ROLE_SUPER_ADMIN'],
             ['is_active' => true]
         );
 
@@ -33,13 +33,13 @@ class SysAdminSeeder extends Seeder
         // 4. Create Users
         $users = [
             [
-                'full_name' => 'Super Admin',
+                'full_name' => 'Super Admin Real',
                 'username' => 'superadmin',
                 'email' => 'superadmin@app.com',
                 'password' => Hash::make('Admin@321'),
             ],
             [
-                'full_name' => 'System',
+                'full_name' => 'System APP',
                 'username' => 'system',
                 'email' => 'system@app.com',
                 'password' => Hash::make('Admin@321'),

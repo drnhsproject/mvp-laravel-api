@@ -23,12 +23,8 @@ class UserResource extends BaseJsonResource
             'is_active' => $this->is_active,
             'is_verified' => $this->is_verified,
             'status' => $this->status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'last_login_at' => $this->last_login_at,
-            'login_attempts' => $this->login_attempts,
             'login_count' => $this->login_count,
             'roles' => $this->whenLoaded('roles', function () {
                 return $this->roles->map(function ($role) {
