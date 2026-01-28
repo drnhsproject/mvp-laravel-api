@@ -30,7 +30,15 @@ class UserResource extends BaseJsonResource
             'last_login_at' => $this->last_login_at,
             'login_attempts' => $this->login_attempts,
             'login_count' => $this->login_count,
-            'roles' => $this->whenLoaded('roles'),
+            'roles' => $this->whenLoaded('roles', function () {
+                return $this->roles->map(function ($role) {
+                    return [
+                        'id' => $role->id,
+                        'code' => $role->code,
+                        'name' => $role->name,
+                    ];
+                });
+            }),
         ];
     }
 }

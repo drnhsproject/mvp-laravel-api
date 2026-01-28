@@ -24,7 +24,8 @@ class PostgresUserRepository implements UserRepositoryInterface
             });
         }
 
-        return $eloquentQuery->orderBy($query->sortColumn, $query->sortDirection)
+        return $eloquentQuery->with('roles')
+            ->orderBy($query->sortColumn, $query->sortDirection)
             ->paginate($query->perPage, ['*'], 'page', $query->page);
     }
 
