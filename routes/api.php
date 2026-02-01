@@ -5,6 +5,7 @@ use App\Modules\Privilege\Presentation\Controllers\PrivilegeController;
 use App\Modules\Role\Presentation\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Modules\User\Presentation\Controllers\UserController;
+use App\Modules\SysParams\Presentation\Controllers\SystemParameterController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -41,6 +42,16 @@ Route::middleware('auth:sanctum')
                 'store' => 'privilege.create',
                 'update' => 'privilege.update',
                 'destroy' => 'privilege.delete',
+            ])
+            ->middleware('check.permission');
+
+        Route::apiResource('sysparams', SystemParameterController::class)
+            ->names([
+                'index' => 'sysparam.list',
+                'show' => 'sysparam.detail',
+                'store' => 'sysparam.create',
+                'update' => 'sysparam.update',
+                'destroy' => 'sysparam.delete',
             ])
             ->middleware('check.permission');
 

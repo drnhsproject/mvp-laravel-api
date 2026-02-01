@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PrivilegeSeeder::class,
             SysAdminSeeder::class,
             ViewerRoleSeeder::class,
+            SystemParameterSeeder::class,
         ]);
     }
 }
