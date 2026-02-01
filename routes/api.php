@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Modules\Privilege\Presentation\Controllers\PrivilegeController;
 use App\Modules\Role\Presentation\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Modules\User\Presentation\Controllers\UserController;
@@ -30,6 +31,16 @@ Route::middleware('auth:sanctum')
                 'store' => 'role.create',
                 'update' => 'role.update',
                 'destroy' => 'role.delete',
+            ])
+            ->middleware('check.permission');
+
+        Route::apiResource('privileges', PrivilegeController::class)
+            ->names([
+                'index' => 'privilege.list',
+                'show' => 'privilege.detail',
+                'store' => 'privilege.create',
+                'update' => 'privilege.update',
+                'destroy' => 'privilege.delete',
             ])
             ->middleware('check.permission');
 
