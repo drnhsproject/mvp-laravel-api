@@ -3,6 +3,7 @@
 namespace App\Modules\SysParams\Presentation\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSystemParameterRequest extends FormRequest
 {
@@ -23,7 +24,13 @@ class StoreSystemParameterRequest extends FormRequest
     {
         return [
             'groups' => ['required', 'string', 'max:255'],
-            'key' => ['required', 'string', 'max:255', 'unique'],
+            'key' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('sysparams', 'key')
+                    ->whereNull('deleted_at'),
+            ],
             'value' => ['required', 'string'],
             'ordering' => ['nullable', 'integer'],
             'description' => ['nullable', 'string'],

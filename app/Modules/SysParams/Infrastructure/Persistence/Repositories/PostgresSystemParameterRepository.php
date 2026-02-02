@@ -65,6 +65,14 @@ class PostgresSystemParameterRepository implements SystemParameterRepositoryInte
 
     public function delete(int $id): bool
     {
-        return SystemParameter::destroy($id) > 0;
+        $systemParameter = SystemParameter::find($id);
+
+        if (!$systemParameter) {
+            return false;
+        }
+
+        $systemParameter->update(['status' => 0]);
+
+        return $systemParameter->delete();
     }
 }
