@@ -38,4 +38,9 @@ interface SystemParameterRepositoryInterface
      * Delete a system parameter (soft delete).
      */
     public function delete(int $id): bool;
+
+    /**
+     * Get system parameters by group for options.
+     */
+    public function getOptionsByGroup(string $group): \Illuminate\Support\Collection;
 }

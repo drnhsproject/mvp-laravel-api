@@ -32,22 +32,55 @@ class SystemParameterSeeder extends Seeder
             // Status Active Group
             [
                 'groups' => 'status_active',
-                'key' => 'active',
+                'key' => '1',
                 'value' => 'Aktif',
                 'ordering' => 1,
                 'description' => 'Status aktif',
             ],
             [
                 'groups' => 'status_active',
-                'key' => 'inactive',
+                'key' => '0',
                 'value' => 'Tidak Aktif',
                 'ordering' => 2,
                 'description' => 'Status tidak aktif',
             ],
+
+            // Method Group
+            [
+                'groups' => 'method',
+                'key' => 'GET',
+                'value' => 'GET',
+                'ordering' => 1,
+                'description' => 'HTTP GET Method',
+            ],
+            [
+                'groups' => 'method',
+                'key' => 'POST',
+                'value' => 'POST',
+                'ordering' => 2,
+                'description' => 'HTTP POST Method',
+            ],
+            [
+                'groups' => 'method',
+                'key' => 'PUT',
+                'value' => 'PUT',
+                'ordering' => 3,
+                'description' => 'HTTP PUT Method',
+            ],
+            [
+                'groups' => 'method',
+                'key' => 'DELETE',
+                'value' => 'DELETE',
+                'ordering' => 4,
+                'description' => 'HTTP DELETE Method',
+            ],
         ];
 
         foreach ($parameters as $parameter) {
-            SystemParameter::create($parameter);
+            SystemParameter::updateOrCreate(
+                ['groups' => $parameter['groups'], 'key' => $parameter['key']],
+                $parameter
+            );
         }
     }
 }

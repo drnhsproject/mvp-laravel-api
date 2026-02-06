@@ -45,6 +45,10 @@ Route::middleware('auth:sanctum')
             ])
             ->middleware('check.permission');
 
+        Route::get('sysparams/groups/{group}', [SystemParameterController::class, 'getOptions'])
+            ->name('sysparam.options')
+            ->middleware('check.permission');
+
         Route::apiResource('sysparams', SystemParameterController::class)
             ->names([
                 'index' => 'sysparam.list',

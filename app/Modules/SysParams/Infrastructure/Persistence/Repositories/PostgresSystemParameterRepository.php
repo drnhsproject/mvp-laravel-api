@@ -75,4 +75,13 @@ class PostgresSystemParameterRepository implements SystemParameterRepositoryInte
 
         return $systemParameter->delete();
     }
+
+    public function getOptionsByGroup(string $group): \Illuminate\Support\Collection
+    {
+        return SystemParameter::query()
+            ->where('groups', $group)
+            ->where('status', 1)
+            ->orderBy('ordering', 'asc')
+            ->get();
+    }
 }

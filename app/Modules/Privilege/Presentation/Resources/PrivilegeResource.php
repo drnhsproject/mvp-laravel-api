@@ -26,6 +26,7 @@ class PrivilegeResource extends JsonResource
             'method' => $this->method,
             'uri' => $this->uri,
             'namespace' => $this->namespace,
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

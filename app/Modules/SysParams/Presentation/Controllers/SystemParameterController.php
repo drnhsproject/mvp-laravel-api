@@ -11,6 +11,7 @@ use App\Modules\SysParams\Application\UseCases\CreateSystemParameter;
 use App\Modules\SysParams\Application\UseCases\DeleteSystemParameter;
 use App\Modules\SysParams\Application\UseCases\GetSystemParameter;
 use App\Modules\SysParams\Application\UseCases\GetSystemParameterList;
+use App\Modules\SysParams\Application\UseCases\GetSystemParameterOptions;
 use App\Modules\SysParams\Application\UseCases\UpdateSystemParameter;
 use App\Modules\SysParams\Presentation\Requests\StoreSystemParameterRequest;
 use App\Modules\SysParams\Presentation\Requests\UpdateSystemParameterRequest;
@@ -26,6 +27,7 @@ class SystemParameterController extends Controller
         protected readonly CreateSystemParameter $createSystemParameter,
         protected readonly UpdateSystemParameter $updateSystemParameter,
         protected readonly DeleteSystemParameter $deleteSystemParameter,
+        protected readonly GetSystemParameterOptions $getSystemParameterOptions,
     ) {}
 
     /**
@@ -41,6 +43,16 @@ class SystemParameterController extends Controller
             'system parameters retrieved successfully',
             SystemParameterResource::class
         );
+    }
+
+    /**
+     * Get system parameter options by group.
+     */
+    public function getOptions(string $group)
+    {
+        $options = $this->getSystemParameterOptions->execute($group);
+
+        return SystemParameterResource::collection($options);
     }
 
     /**
